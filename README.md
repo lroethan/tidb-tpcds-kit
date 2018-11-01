@@ -36,29 +36,20 @@ Data generation is done via `dsdgen`:
 cd tools && ./dsdgen -sc 100 -f && cd -
 ```
 
-## 3. DataBase and Table schema generation
+## 3. Load Data
 ```sh
 mysql -h 192.168.6.128 -P 4000 -u root -p123 -D test -e "drop database if exists tpcds;"
 mysql -h 192.168.6.128 -P 4000 -u root -p123 -D test -e "create database tpcds;"
 mysql -h 192.168.6.128 -P 4000 -u root -p123 -D tpcds < tools/tpcds.sql
-```
-
-
-## 4. Load Data
-```sh
 ./load_data.sh
 ```
 
-## 5. Query generation
 
-Query generation is done via `dsqgen` with query templetes, here we use a pre-written shell script file [genquery.sh](./genquery.sh), after running this script, queries are located in directory "queries":
-```sh
-./genquery.sh
-```
-
-All supported TPC-DS queries for TiDB are generated in `tools/queries`
-
-## 6. prepare work before query
+## 4. prepare work before query
 
 mysql -h 192.168.6.128 -P 4000 -u root -p123 -D tpcds < tools/analyze_tables.sql
 mysql -h 192.168.6.128 -P 4000 -u root -p123 -D tpcds < tools/set_variables.sql
+
+## 5. Run Queries
+
+Sample queries from the 100GB scale factor can be found in the `queries/` directory.  The `query-templates/` directory contains the Apache Impala TPC-DS query templates which can be used with `dsqgen` (found in the official TPC-DS tools) to generate queries for other scale factors or to generate more queries with different substitution variables.
